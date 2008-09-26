@@ -18,10 +18,8 @@ describe Task do
     fixtures :tasks, :users
 
     it "should have a user" do
-      add_feature = Task.find(1)
-      add_feature.user.should_not be_nil
+      tasks(:add_feature).user.should == users(:quentin)
     end
-
   end
 
 protected
