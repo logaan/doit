@@ -1,0 +1,9 @@
+log/*.log
+db/*.sqlite3
+doc/*
+coverage/*
+*.swp
+*.swo
+tmp/*
+saikuro/*
+
