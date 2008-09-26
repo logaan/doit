@@ -1,7 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  name: MyString
-
-two:
-  name: MyString
+add_feature:
+  id: 1
+  name: add feature
+  user_id: 1

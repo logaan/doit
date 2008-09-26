@@ -23,6 +23,19 @@ describe User do
   end
 
   #
+  # Custom
+  #
+
+  describe 'relationships' do
+    fixtures :tasks
+
+    it 'has tasks' do
+      quentin = User.find(1)
+      quentin.tasks.length.should == 1
+    end
+  end
+
+  #
   # Validations
   #
 
