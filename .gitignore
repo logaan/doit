@@ -6,4 +6,5 @@ coverage/*
 *.swo
 tmp/*
 saikuro/*
+test/*
 
