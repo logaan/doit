@@ -6,12 +6,14 @@ include AuthenticatedTestHelper
 
 describe UsersController do
   fixtures :users
+  
+  before do
+    @user = mock User
+  end
 
   describe "GET 'index'" do
     before do
-      @user = mock User
-
-      User.stub!(:find).and_return([@user])
+      User.stub!(:find).with(:all).and_return([@user])
     end
 
     it "should be successful" do
@@ -40,9 +42,19 @@ describe UsersController do
   end
 
   describe "GET 'show'" do
+    before do
+      @params = {:id => 1}
+      User.stub!(:find).and_return(@user)
+    end
+
     it "should be successful" do
-      get 'show'
+      get 'show', @params
       response.should be_success
+    end
+
+    it "should assign the appropriate user" do
+      get 'show', @params
+      assigns[:user].should == @user
     end
   end
 
