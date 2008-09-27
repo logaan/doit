@@ -1,3 +1,9 @@
 <div id="user">
   <h1 id="login"><%= @user.login %></h1>
+  <%- unless @user.tasks.empty? -%>
+  <h2>Tasks</h2>
+  <ul id="tasks">
+    <%= render :partial => @user.tasks %>
+  </ul>
+  <%- end -%>
 </div>

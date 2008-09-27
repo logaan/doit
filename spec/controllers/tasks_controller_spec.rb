@@ -55,6 +55,11 @@ describe TasksController do
       get 'new'
       response.should be_success
     end
+
+    it "should assign a blank user object to work with" do
+      get 'new'
+      assigns[:task].should_not be_nil
+    end
   end
 
   describe "GET 'create'" do
