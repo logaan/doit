@@ -7,11 +7,21 @@ include AuthenticatedTestHelper
 describe UsersController do
   fixtures :users
 
-
   describe "GET 'index'" do
+    before do
+      @user = mock User
+
+      User.stub!(:find).and_return([@user])
+    end
+
     it "should be successful" do
       get 'index'
       response.should be_success
+    end
+
+    it "should assign the list of users" do
+      get 'index'
+      assigns[:users].should == [@user]
     end
   end
 
