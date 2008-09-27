@@ -2,16 +2,51 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe TasksController do
 
-  #Delete these examples and add some real ones
   it "should use TasksController" do
     controller.should be_an_instance_of(TasksController)
   end
 
-
   describe "GET 'index'" do
-    it "should be successful" do
-      get 'index'
-      response.should be_success
+    describe "when un-filtered" do
+      before do
+        @fix_bug = mock "fix bug"
+        @rake_lawn = mock "rake lawn"
+
+        Task.stub!(:find).with(:all).and_return([@fix_bug, @rake_lawn])
+      end
+
+      it "should be successful" do
+        get 'index'
+        response.should be_success
+      end
+
+      it "should assign all tasks" do
+        get 'index'
+        assigns[:tasks].should == [@fix_bug, @rake_lawn]
+      end
+    end
+
+    describe "when filtered by user" do
+      before do
+        @rake_lawn = mock Task
+
+        @freddy = mock User
+        @freddy.stub!(:tasks).and_return([@rake_lawn])
+
+        User.stub!(:find).and_return(@freddy)
+
+        @params = {:user_id => 1}
+      end
+
+      it "should be successful" do
+        get 'index', @params
+        response.should be_success
+      end
+
+      it "should assign the users tasks" do
+        get 'index', @params
+        assigns[:tasks].should == [@rake_lawn]
+      end
     end
   end
 
