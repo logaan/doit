@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe "/tasks/new" do
   before(:each) do
-    @new_task = mock_model(Task).as_new_record
+    @new_task = mock_model(Task, :name => nil).as_new_record
 
     assigns[:task] = @new_task
 
@@ -10,9 +10,11 @@ describe "/tasks/new" do
   end
   
   it "should have a form for entering task details" do
-    # Giving up on this one. Form for doesn't seem to
-    # play nicely with mock model
-
     response.should have_tag('form#new_task')
+  end
+
+  it "should have a labelled name field" do
+    response.should have_tag("label[for=task_name]")
+    response.should have_tag("#task_name")
   end
 end
