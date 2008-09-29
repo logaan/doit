@@ -110,6 +110,12 @@ describe TasksController do
         response.should be_success
       end.should_not change(Task, :count)
     end 
+
+    it "should render 'new' view on failure" do
+      login_as(:quentin)
+      create_task(:name => nil)
+      response.should render_template('tasks/new')
+    end 
   end
 
   describe "GET 'show'" do
