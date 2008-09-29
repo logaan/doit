@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe TasksController do
+  fixtures :users
 
   it "should use TasksController" do
     controller.should be_an_instance_of(TasksController)
@@ -51,22 +52,36 @@ describe TasksController do
   end
 
   describe "GET 'new'" do
+    it "should redirect if user is not authorised" do
+      get 'new'
+      response.should be_redirect
+    end
+
     it "should be successful" do
+      login_as(:quentin)
       get 'new'
       response.should be_success
     end
 
     it "should assign a blank user object to work with" do
+      login_as(:quentin)
       get 'new'
       assigns[:task].should_not be_nil
     end
   end
 
   describe "GET 'create'" do
+    it "should redirect if user is not authorised" do
+      get 'new'
+      response.should be_redirect
+    end
+
     it "should be successful" do
+      login_as(:quentin)
       get 'create'
       response.should be_success
     end
+
   end
 
   describe "GET 'show'" do
@@ -77,21 +92,39 @@ describe TasksController do
   end
 
   describe "GET 'edit'" do
+    it "should redirect if user is not authorised" do
+      get 'new'
+      response.should be_redirect
+    end
+
     it "should be successful" do
+      login_as(:quentin)
       get 'edit'
       response.should be_success
     end
   end
 
   describe "GET 'update'" do
+    it "should redirect if user is not authorised" do
+      get 'new'
+      response.should be_redirect
+    end
+
     it "should be successful" do
+      login_as(:quentin)
       get 'update'
       response.should be_success
     end
   end
 
   describe "GET 'destroy'" do
+    it "should redirect if user is not authorised" do
+      get 'new'
+      response.should be_redirect
+    end
+
     it "should be successful" do
+      login_as(:quentin)
       get 'destroy'
       response.should be_success
     end
