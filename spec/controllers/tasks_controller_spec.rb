@@ -82,6 +82,34 @@ describe TasksController do
       response.should be_success
     end
 
+    it "should allow creation" do
+      login_as(:quentin)
+      lambda do
+        create_task
+        response.should redirect_to(tasks_path)
+      end.should change(Task, :count).by(1)
+    end
+
+    it "should set user_id to current logged-in user" do
+      login_as(:quentin)
+      create_task
+      assigns[:task].user.should eql(users(:quentin))
+    end
+
+    it "should flash notice on success" do
+      login_as(:quentin)
+      create_task
+      flash[:notice].should_not be_nil
+    end
+
+    it "should require name on creation" do
+      login_as(:quentin)
+      lambda do
+        create_task(:name => nil)
+        assigns[:task].errors.on(:name).should_not be_nil
+        response.should be_success
+      end.should_not change(Task, :count)
+    end 
   end
 
   describe "GET 'show'" do
@@ -129,4 +157,9 @@ describe TasksController do
       response.should be_success
     end
   end
+
+  def create_task(options = {})
+    post :create, :task => { :name => 'test task', :user_id => '1' }.merge(options)
+  end
+
 end
