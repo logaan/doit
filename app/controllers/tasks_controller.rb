@@ -34,6 +34,16 @@ class TasksController < ApplicationController
   end
 
   def update
+    @task = Task.find params[:id]
+    @task.update_attributes params[:task]
+
+    if @task.valid?
+      @task.save
+      flash[:notice] = "Existing task updated successfully!"
+      redirect_to tasks_path
+    else
+      render :action => 'edit'
+    end
   end
 
   def destroy

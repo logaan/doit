@@ -152,15 +152,34 @@ describe TasksController do
 
   describe "GET 'update'" do
     it "should redirect if user is not authorised" do
-      get 'update'
+      put 'update', :id => 1
       response.should be_redirect
     end
 
-    it "should be successful" do
+    it "should allow modification" do
       login_as(:quentin)
-      get 'update'
-      response.should be_success
+      put 'update', :id => 1, :task => { :name => 'cheese' }
+      response.should redirect_to(tasks_path)
     end
+
+    it "should flash notice on success" do
+      login_as(:quentin)
+      put 'update', :id => 1, :task => { :name => 'cheese' }
+      flash[:notice].should_not be_nil
+    end
+
+    it "should require name on modification" do
+      login_as(:quentin)
+      put 'update', :id => 1, :task => { :name => nil }
+      assigns[:task].errors.on(:name).should_not be_nil
+      response.should be_success
+    end 
+
+    it "should render 'edit' view on failure" do
+      login_as(:quentin)
+      put 'update', :id => 1, :task => { :name => nil }
+      response.should render_template('tasks/edit')
+    end 
   end
 
   describe "GET 'destroy'" do
