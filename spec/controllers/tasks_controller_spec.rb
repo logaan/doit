@@ -120,21 +120,33 @@ describe TasksController do
   end
 
   describe "GET 'edit'" do
+    before(:each) do
+      @task = mock_model(Task)
+      Task.stub!(:find).and_return(@task)
+    end
+
     it "should redirect if user is not authorised" do
-      get 'new'
+      get 'edit', :id => 1
       response.should be_redirect
     end
 
     it "should be successful" do
       login_as(:quentin)
-      get 'edit'
+      get 'edit', :id => 1
       response.should be_success
+    end
+
+    it "should load task into instance variable for view" do
+      login_as(:quentin)
+      Task.should_receive(:find).with('1').and_return(@task)
+      get 'edit', :id => '1'
+      assigns[:task].should eql(@task)
     end
   end
 
   describe "GET 'update'" do
     it "should redirect if user is not authorised" do
-      get 'new'
+      get 'update'
       response.should be_redirect
     end
 
@@ -147,7 +159,7 @@ describe TasksController do
 
   describe "GET 'destroy'" do
     it "should redirect if user is not authorised" do
-      get 'new'
+      get 'destroy'
       response.should be_redirect
     end
 
